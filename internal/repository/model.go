@@ -1,9 +1,14 @@
 package repository
 
-type User struct {
+type Sample struct {
 	ID            int
-	Username      string
-	Email         string
-	Password      string
-	ProfileImgURL string
+	Name          string
+	BPM           int
+	Instrument    string
+	Key           string
+	Length        string
+	SampleFileUrl string
+	CoverUrl      string
+	Price         string
+	SampleType    string
 }

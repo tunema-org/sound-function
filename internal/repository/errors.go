@@ -1,7 +1,7 @@
 package repository
 
-import "errors"
+// import "errors"
 
-var (
-	ErrUserAlreadyExists = errors.New("user already exists")
-)
+// var (
+// 	ErrSampleAlreadyExists = errors.New("user already exists")
+// )
