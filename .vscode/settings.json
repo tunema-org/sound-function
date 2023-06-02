@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "postgres-tunema.cnwcm0xatvou.us-east-1.rds.amazonaws.com",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "tunema-rds",
+      "database": "tunema",
+      "username": "postgres"
+    }
+  ]
+}
