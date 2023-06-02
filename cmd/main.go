@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
@@ -43,7 +44,7 @@ func main() {
 	handler := api.NewHandler(ctx, backend)
 
 	if !isLambda() {
-		handler.Run()
+		handler.Run(cfg.Address)
 		return
 	}
 

@@ -8,9 +8,8 @@ import (
 )
 
 type InsertSampleParams struct {
-	Sample   model.Sample
-	TagIDs   []int
-	AuthorID int
+	Sample model.Sample
+	TagIDs []int
 }
 
 func (r *Repository) InsertSample(ctx context.Context, params InsertSampleParams) (int, error) {
@@ -23,10 +22,15 @@ func (r *Repository) InsertSample(ctx context.Context, params InsertSampleParams
 
 	var sampleID int
 	err = tx.QueryRow(ctx, insertSampleQuery,
-		params.AuthorID,
+		params.Sample.UserID,
 		params.Sample.Name,
 		params.Sample.BPM,
-		params.Sample.BPM,
+		params.Sample.Key,
+		params.Sample.KeyScale,
+		params.Sample.Time,
+		params.Sample.FileURL,
+		params.Sample.CoverUrl,
+		params.Sample.Price,
 	).Scan(&sampleID)
 	if err != nil {
 		tx.Rollback(ctx)

@@ -38,7 +38,7 @@ const (
 	SampleKeyB  SampleKey = "B"
 )
 
-var ValidSampleKeys = []SampleKey{
+var SampleValidKeys = []SampleKey{
 	SampleKeyC,
 	SampleKeyCs,
 	SampleKeyDb,
@@ -65,7 +65,7 @@ const (
 	SampleKeyScaleMinor SampleKeyScale = "minor"
 )
 
-var ValidSampleKeyScales = []SampleKeyScale{
+var SampleValidKeyScales = []SampleKeyScale{
 	SampleKeyScaleMajor,
 	SampleKeyScaleMinor,
 }
