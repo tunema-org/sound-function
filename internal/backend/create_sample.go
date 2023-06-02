@@ -10,7 +10,6 @@ import (
 	"github.com/tunema-org/sound-function/internal/jwt"
 	"github.com/tunema-org/sound-function/internal/repository"
 	"github.com/tunema-org/sound-function/model"
-	"golang.org/x/sync/errgroup"
 )
 
 type CreateSampleParams struct {
@@ -72,7 +71,6 @@ type storeSampleFilesResult struct {
 }
 
 func (b *Backend) storeSampleFiles(ctx context.Context, params CreateSampleParams) (storeSampleFilesResult, error) {
-	var group errgroup.Group
 	var result storeSampleFilesResult
 
 	sampleFileKey := uuid.New().String()
@@ -94,10 +92,6 @@ func (b *Backend) storeSampleFiles(ctx context.Context, params CreateSampleParam
 	}
 
 	result.CoverFileURL = s3CoverFileUploadOutput.Location
-
-	if err := group.Wait(); err != nil {
-		return storeSampleFilesResult{}, err
-	}
 
 	return result, nil
 }
