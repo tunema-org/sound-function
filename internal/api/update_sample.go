@@ -45,10 +45,9 @@ func (i UpdateSampleInput) Validate() error {
 }
 
 func (h *handler) UpdateSample(c *gin.Context) {
-
-	sampleID, err := strconv.Atoi(c.Param("id"))
 	var input UpdateSampleInput
 
+	sampleID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(400, M{
 			"message": "invalid sample id",
