@@ -2,13 +2,15 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"github.com/tunema-org/sound-function/model"
 	"golang.org/x/exp/slices"
 )
-
-func (h *handler) UpdateSample(c *gin.Context) {}
 
 type UpdateSampleInput struct {
 	Name     string  `form:"name" binding:"required"`
@@ -18,8 +20,6 @@ type UpdateSampleInput struct {
 	Time     int     `form:"time" binding:"required"`
 	Price    float64 `form:"price" binding:"required"`
 }
-
-//sy bingung mau reuse supported cover img ny bgmn
 
 func (i UpdateSampleInput) Validate() error {
 	if err := requiredFields(map[string]any{
@@ -42,4 +42,52 @@ func (i UpdateSampleInput) Validate() error {
 	}
 
 	return nil
+}
+
+func (h *handler) UpdateSample(c *gin.Context) {
+
+	sampleID, err := strconv.Atoi(c.Param("id"))
+	var input UpdateSampleInput
+
+	if err != nil {
+		c.JSON(400, M{
+			"message": "invalid sample id",
+		})
+		return
+	}
+
+	if err != nil {
+		log.Err(err).Msg("problem with updating sample")
+		c.JSON(http.StatusInternalServerError, M{
+			"message": "internal server error",
+		})
+		return
+	}
+
+	if err := c.Bind(&input); err != nil {
+		c.JSON(http.StatusBadRequest, M{
+			"message": "invalid request body",
+		})
+		return
+	}
+
+	if err := input.Validate(); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, M{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	authorization := strings.Split(c.Request.Header["Authorization"][0], " ")
+	if len(authorization) != 2 {
+		c.JSON(http.StatusUnauthorized, M{
+			"message": "please login",
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, M{
+		"message":  "sample updated",
+		"sampleID": sampleID,
+	})
 }

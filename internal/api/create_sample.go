@@ -3,12 +3,11 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
-	"github.com/tunema-org/sound-function/internal/backend"
 	"github.com/tunema-org/sound-function/internal/mime"
 	"github.com/tunema-org/sound-function/model"
 	"golang.org/x/exp/slices"
@@ -142,19 +141,14 @@ func (h *handler) CreateSample(c *gin.Context) {
 		return
 	}
 
-	sampleID, err := h.backend.CreateSample(c.Request.Context(), authorization[1], backend.CreateSampleParams{
-		Name:          input.Name,
-		BPM:           input.BPM,
-		Key:           model.SampleKey(input.Key),
-		KeyScale:      model.SampleKeyScale(input.KeyScale),
-		Time:          input.Time,
-		AudioFile:     audioFile,
-		AudioFileType: filepath.Ext(audioFileHeader.Filename),
-		CoverFile:     coverFile,
-		CoverFileType: filepath.Ext(coverFileHeader.Filename),
-		Price:         input.Price,
-		TagIDs:        input.TagIDs,
-	})
+	sampleID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, M{
+			"message": "invalid sample id",
+		})
+		return
+	}
+
 	if err != nil {
 		log.Err(err).Msg("problem with creating sample")
 		c.JSON(http.StatusInternalServerError, M{

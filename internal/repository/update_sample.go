@@ -10,7 +10,6 @@ import (
 
 type UpdateSampleParams struct {
 	Sample model.Sample
-	TagIDs []int
 }
 
 func (r *Repository) UpdateSample(ctx context.Context, params UpdateSampleParams) (int, error) {
@@ -23,7 +22,6 @@ func (r *Repository) UpdateSample(ctx context.Context, params UpdateSampleParams
 
 	var SampleID int
 	err = tx.QueryRow(ctx, updateSampleQuery,
-		params.Sample.UserID,
 		params.Sample.Name,
 		params.Sample.BPM,
 		params.Sample.Key,
@@ -31,7 +29,6 @@ func (r *Repository) UpdateSample(ctx context.Context, params UpdateSampleParams
 		params.Sample.Time,
 		params.Sample.Price,
 	).Scan(&SampleID)
-
 	if err != nil {
 		tx.Rollback(ctx)
 		return 0, err
