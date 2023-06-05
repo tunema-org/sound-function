@@ -7,7 +7,7 @@ import (
 )
 
 type ListSamplesResult struct {
-	Sample     model.Sample `json:"sample"`
+	Data       model.Sample `json:"data"`
 	Tags       []string     `json:"tags"`
 	ArtistName string       `json:"artist_name"`
 	Sold       int          `json:"sold"`
@@ -40,17 +40,17 @@ func (r *Repository) ListSamples(ctx context.Context) ([]ListSamplesResult, erro
 		var row ListSamplesResult
 
 		err := rows.Scan(
-			&row.Sample.ID,
-			&row.Sample.UserID,
-			&row.Sample.Name,
-			&row.Sample.BPM,
-			&row.Sample.Key,
-			&row.Sample.KeyScale,
-			&row.Sample.Time,
-			&row.Sample.FileURL,
-			&row.Sample.CoverURL,
-			&row.Sample.Price,
-			&row.Sample.CreatedAt,
+			&row.Data.ID,
+			&row.Data.UserID,
+			&row.Data.Name,
+			&row.Data.BPM,
+			&row.Data.Key,
+			&row.Data.KeyScale,
+			&row.Data.Time,
+			&row.Data.FileURL,
+			&row.Data.CoverURL,
+			&row.Data.Price,
+			&row.Data.CreatedAt,
 			&row.ArtistName,
 			&row.Tags,
 			&row.Sold,
