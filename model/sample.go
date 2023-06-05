@@ -3,17 +3,17 @@ package model
 import "time"
 
 type Sample struct {
-	ID        int
-	UserID    int
-	Name      string
-	BPM       int
-	Key       SampleKey
-	KeyScale  SampleKeyScale
-	Time      int
-	FileURL   string
-	CoverUrl  string
-	Price     float64
-	CreatedAt time.Time
+	ID        int            `json:"id"`
+	UserID    int            `json:"user_id"`
+	Name      string         `json:"name"`
+	BPM       int            `json:"bpm"`
+	Key       SampleKey      `json:"key"`
+	KeyScale  SampleKeyScale `json:"key_scale"`
+	Time      int            `json:"time"`
+	FileURL   string         `json:"file_url"`
+	CoverURL  string         `json:"cover_url"`
+	Price     float64        `json:"price"`
+	CreatedAt time.Time      `json:"created_at"`
 }
 
 type SampleKey string

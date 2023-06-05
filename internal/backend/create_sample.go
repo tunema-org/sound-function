@@ -52,7 +52,7 @@ func (b *Backend) CreateSample(ctx context.Context, accessToken string, params C
 			Time:     params.Time,
 			Price:    params.Price,
 			FileURL:  storeSampleFileResult.AudioFileURL,
-			CoverUrl: storeSampleFileResult.CoverFileURL,
+			CoverURL: storeSampleFileResult.CoverFileURL,
 		},
 		TagIDs: params.TagIDs,
 	})

@@ -40,12 +40,14 @@
 SELECT
     samples.*,
     users.username AS author_name,
-    ARRAY_AGG(tags.name) AS tags
+    ARRAY_AGG(tags.name) AS tags,
+    COUNT(order_products.sample_id) AS sold
 FROM
     samples
     LEFT JOIN users ON samples.user_id = users.id
     LEFT JOIN sample_tags ON samples.id = sample_tags.sample_id
     LEFT JOIN tags ON sample_tags.tag_id = tags.id
+    LEFT JOIN order_products ON order_products.sample_id = samples.id
 GROUP BY
     samples.id,
     users.username;

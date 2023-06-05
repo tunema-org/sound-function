@@ -18,7 +18,7 @@ func New(db *pgxpool.Pool) *Repository {
 
 // TODO : categorization
 func (r *Repository) GetSamples(ctx context.Context, id int) (model.Sample, usermodel.User, model.Sample_tag, error) {
-	query := `SELECT samples.*,users.*,sample_tags FROM samples LEFT JOIN users ON users.id = samples.user_id JOIN sample_tags ON samples.id = sample_tags.sample.id 
+	query := `SELECT samples.*,users.*,sample_tags FROM samples LEFT JOIN users ON users.id = samples.user_id JOIN sample_tags ON samples.id = sample_tags.sample.id
 	WHERE sample_tags.tag_id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);`
 
 	var sample model.Sample
@@ -51,7 +51,7 @@ func (r *Repository) FindSampleByID(ctx context.Context, id int) (model.Sample, 
 			&sample.KeyScale,
 			&sample.Time,
 			&sample.FileURL,
-			&sample.CoverUrl,
+			&sample.CoverURL,
 			&sample.Price,
 			&sample.CreatedAt,
 			&author.ID,

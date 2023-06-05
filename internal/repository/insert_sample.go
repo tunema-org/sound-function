@@ -29,7 +29,7 @@ func (r *Repository) InsertSample(ctx context.Context, params InsertSampleParams
 		params.Sample.KeyScale,
 		params.Sample.Time,
 		params.Sample.FileURL,
-		params.Sample.CoverUrl,
+		params.Sample.CoverURL,
 		params.Sample.Price,
 	).Scan(&sampleID)
 	if err != nil {

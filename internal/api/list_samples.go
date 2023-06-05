@@ -2,9 +2,9 @@ package api
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 type CategoryInput struct {
@@ -15,14 +15,6 @@ type CategoryInput struct {
 func (h *handler) ListSamples(c *gin.Context) {
 	var input CategoryInput
 
-	Tag_ID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(400, M{
-			"message": "invalid sample id",
-		})
-		return
-	}
-
 	if err := c.Bind(&input); err != nil {
 		c.JSON(http.StatusBadRequest, M{
 			"message": "invalid request body",
@@ -30,9 +22,19 @@ func (h *handler) ListSamples(c *gin.Context) {
 		return
 	}
 
+	samples, err := h.backend.ListSamples(c.Request.Context())
+	if err != nil {
+		log.Err(err).Msg("problem with creating sample")
+		c.JSON(http.StatusInternalServerError, M{
+			"message": "internal server error",
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, M{
-		"message":  "sample retrieved",
-		"sampleID": Tag_ID,
+		"message":     "sample retrieved",
+		"items":       samples,
+		"total_items": len(samples),
 	})
 
 }
