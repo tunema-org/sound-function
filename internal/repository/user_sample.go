@@ -6,31 +6,27 @@ import (
 	"github.com/tunema-org/sound-function/model"
 )
 
-type ListSamplesResult struct {
+type UserSamples struct {
 	Data       model.Sample `json:"data"`
 	Tags       []string     `json:"tags"`
 	ArtistName string       `json:"artist_name"`
 	Sold       int          `json:"sold"`
 }
 
-func (r *Repository) ListSamples(ctx context.Context) ([]ListSamplesResult, error) {
-	var result []ListSamplesResult
+func (r *Repository) UserSamples(ctx context.Context) ([]UserSamples, error) {
+	var result []UserSamples
 
-	query := `SELECT
-		samples.*,
-		users.username AS artist_name,
-		ARRAY_AGG(tags.name) AS tags,
-		COUNT(order_products.sample_id) AS sold
+	query := `SELECT samples.*
 	FROM
 		samples
 		LEFT JOIN users ON samples.user_id = users.id
 		LEFT JOIN sample_tags ON samples.id = sample_tags.sample_id
 		LEFT JOIN tags ON sample_tags.tag_id = tags.id
 		LEFT JOIN order_products ON order_products.sample_id = samples.id
+	WHERE
+		users.id = 1
 	GROUP BY
-		samples.id,
-		users.username
-	ORDER BY sold DESC;`
+		samples.id`
 
 	rows, err := r.db.Query(ctx, query)
 	if err != nil {
@@ -38,7 +34,7 @@ func (r *Repository) ListSamples(ctx context.Context) ([]ListSamplesResult, erro
 	}
 
 	for rows.Next() {
-		var row ListSamplesResult
+		var row UserSamples
 
 		err := rows.Scan(
 			&row.Data.ID,
@@ -64,4 +60,5 @@ func (r *Repository) ListSamples(ctx context.Context) ([]ListSamplesResult, erro
 	}
 
 	return result, nil
+
 }
