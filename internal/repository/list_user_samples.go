@@ -13,10 +13,15 @@ type UserSamples struct {
 	Sold       int          `json:"sold"`
 }
 
-func (r *Repository) UserSamples(ctx context.Context) ([]UserSamples, error) {
+func (r *Repository) ListUserSamples(ctx context.Context, userID int) ([]UserSamples, error) {
 	var result []UserSamples
 
-	query := `SELECT samples.*
+	query := `
+	SELECT
+		samples.*,
+		users.username AS artist_name,
+		ARRAY_AGG(tags.name) AS tags,
+		COUNT(order_products.sample_id) AS sold
 	FROM
 		samples
 		LEFT JOIN users ON samples.user_id = users.id
@@ -24,11 +29,13 @@ func (r *Repository) UserSamples(ctx context.Context) ([]UserSamples, error) {
 		LEFT JOIN tags ON sample_tags.tag_id = tags.id
 		LEFT JOIN order_products ON order_products.sample_id = samples.id
 	WHERE
-		users.id = $1
+		samples.user_id = $1
 	GROUP BY
-		samples.id`
+		samples.id,
+		users.username
+	ORDER BY created_at DESC;`
 
-	rows, err := r.db.Query(ctx, query)
+	rows, err := r.db.Query(ctx, query, userID)
 	if err != nil {
 		return nil, err
 	}

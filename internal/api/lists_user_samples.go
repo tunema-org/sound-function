@@ -2,13 +2,21 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (h *handler) UserSamples(c *gin.Context) {
-	samples, err := h.backend.UserSamples(c.Request.Context())
+func (h *handler) ListUserSamples(c *gin.Context) {
+	userID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, M{
+			"message": "invalid user id",
+		})
+		return
+	}
 
+	samples, err := h.backend.ListUserSamples(c.Request.Context(), userID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, M{
 			"message": "internal server error",

@@ -56,6 +56,32 @@
 -- FROM
 --     tags
 --     LEFT JOIN categories ON tags.category_id = categories.id;
+-- SELECT
+--     samples.*,
+--     users.username AS artist_name,
+--     ARRAY_AGG(tags.name) AS tags,
+--     COUNT(order_products.sample_id) AS sold
+-- FROM
+--     samples
+--     LEFT JOIN users ON samples.user_id = users.id
+--     LEFT JOIN sample_tags ON samples.id = sample_tags.sample_id
+--     LEFT JOIN tags ON sample_tags.tag_id = tags.id
+--     LEFT JOIN order_products ON order_products.sample_id = samples.id
+-- GROUP BY
+--     samples.id,
+--     users.username
+-- HAVING
+--     ARRAY_AGG(tags.id) @> ARRAY[16]::integer[]
+-- SELECT
+--     samples.*
+-- FROM
+--     samples
+--     LEFT JOIN users ON samples.user_id = users.id
+--     LEFT JOIN sample_tags ON samples.id = sample_tags.sample_id
+--     LEFT JOIN tags ON sample_tags.tag_id = tags.id
+--     LEFT JOIN order_products ON order_products.sample_id = samples.id
+-- WHERE
+--     samples.user_id = 1
 SELECT
     samples.*,
     users.username AS artist_name,
@@ -67,8 +93,10 @@ FROM
     LEFT JOIN sample_tags ON samples.id = sample_tags.sample_id
     LEFT JOIN tags ON sample_tags.tag_id = tags.id
     LEFT JOIN order_products ON order_products.sample_id = samples.id
+WHERE
+    samples.user_id = 2
 GROUP BY
     samples.id,
     users.username
-HAVING
-    ARRAY_AGG(tags.id) @> ARRAY[16]::integer[]
+ORDER BY
+    created_at DESC
