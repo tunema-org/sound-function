@@ -7,21 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type CategoryInput struct {
-	Tag_ID int
-}
-
-// error kykny
 func (h *handler) ListSamples(c *gin.Context) {
-	var input CategoryInput
-
-	if err := c.Bind(&input); err != nil {
-		c.JSON(http.StatusBadRequest, M{
-			"message": "invalid request body",
-		})
-		return
-	}
-
 	samples, err := h.backend.ListSamples(c.Request.Context())
 	if err != nil {
 		log.Err(err).Msg("problem with creating sample")
@@ -36,5 +22,4 @@ func (h *handler) ListSamples(c *gin.Context) {
 		"items":       samples,
 		"total_items": len(samples),
 	})
-
 }

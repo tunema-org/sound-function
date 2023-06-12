@@ -30,7 +30,7 @@ func Contains(file multipart.File, contentTypes []string) bool {
 		return false
 	}
 
-	log.Debug().Str("content_type", contentType).Msg("")
+	log.Info().Str("content_type", contentType).Msg("")
 
 	return slices.Contains(contentTypes, contentType)
 }

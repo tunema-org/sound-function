@@ -30,6 +30,7 @@ var supportedSampleAudioFileTypes = []string{
 	"audio/wave",
 	"audio/aac",
 	"audio/ogg",
+	"application/octet-stream",
 }
 
 var supportedSampleCoverImageTypes = []string{
@@ -37,6 +38,7 @@ var supportedSampleCoverImageTypes = []string{
 	"image/jpg",
 	"image/png",
 	"image/webp",
+	"application/octet-stream",
 }
 
 func (i CreateSampleInput) Validate() error {
@@ -64,6 +66,15 @@ func (i CreateSampleInput) Validate() error {
 }
 
 func (h *handler) CreateSample(c *gin.Context) {
+
+	authorization := strings.Split(c.Request.Header["Authorization"][0], " ")
+	if len(authorization) != 2 {
+		c.JSON(http.StatusUnauthorized, M{
+			"message": "please login",
+		})
+		return
+	}
+
 	var input CreateSampleInput
 
 	if err := c.Bind(&input); err != nil {
@@ -82,6 +93,7 @@ func (h *handler) CreateSample(c *gin.Context) {
 
 	audioFileHeader, err := c.FormFile("audio_file")
 	if err != nil {
+		log.Err(err).Msg(err.Error())
 		c.JSON(http.StatusUnprocessableEntity, M{
 			"message": "invalid audio file",
 		})
@@ -98,6 +110,7 @@ func (h *handler) CreateSample(c *gin.Context) {
 
 	audioFile, err := audioFileHeader.Open()
 	if err != nil {
+		log.Err(err).Msg(err.Error())
 		c.JSON(http.StatusUnprocessableEntity, M{
 			"message": "invalid audio file",
 		})
@@ -121,6 +134,7 @@ func (h *handler) CreateSample(c *gin.Context) {
 	}
 
 	if !mime.Contains(audioFile, supportedSampleAudioFileTypes) {
+		log.Info().Msg(audioFileHeader.Header.Get("Content-Type"))
 		c.JSON(http.StatusBadRequest, M{
 			"message": "invalid audio file type",
 		})
@@ -130,14 +144,6 @@ func (h *handler) CreateSample(c *gin.Context) {
 	if !mime.Contains(coverFile, supportedSampleCoverImageTypes) {
 		c.JSON(http.StatusBadRequest, M{
 			"message": "invalid cover file type",
-		})
-		return
-	}
-
-	authorization := strings.Split(c.Request.Header["Authorization"][0], " ")
-	if len(authorization) != 2 {
-		c.JSON(http.StatusUnauthorized, M{
-			"message": "please login",
 		})
 		return
 	}
