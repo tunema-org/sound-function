@@ -24,7 +24,7 @@ func (r *Repository) UserSamples(ctx context.Context) ([]UserSamples, error) {
 		LEFT JOIN tags ON sample_tags.tag_id = tags.id
 		LEFT JOIN order_products ON order_products.sample_id = samples.id
 	WHERE
-		users.id = 1
+		users.id = $1
 	GROUP BY
 		samples.id`
 
