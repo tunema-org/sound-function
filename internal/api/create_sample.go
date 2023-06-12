@@ -78,6 +78,7 @@ func (h *handler) CreateSample(c *gin.Context) {
 	var input CreateSampleInput
 
 	if err := c.Bind(&input); err != nil {
+		log.Err(err).Msg(err.Error())
 		c.JSON(http.StatusBadRequest, M{
 			"message": "invalid request body",
 		})
@@ -170,7 +171,7 @@ func (h *handler) CreateSample(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, M{
-		"message":  "sample created",
-		"sampleID": sampleID,
+		"message":   "sample created",
+		"sample_id": sampleID,
 	})
 }

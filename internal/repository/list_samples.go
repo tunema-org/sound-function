@@ -30,7 +30,7 @@ func (r *Repository) ListSamples(ctx context.Context) ([]ListSamplesResult, erro
 	GROUP BY
 		samples.id,
 		users.username
-	ORDER BY sold DESC;`
+	ORDER BY samples.created_at DESC;`
 
 	rows, err := r.db.Query(ctx, query)
 	if err != nil {

@@ -39,7 +39,7 @@ func NewHandler(ctx context.Context, backend *backend.Backend) *gin.Engine {
 
 	r.GET("/sounds", h.ListSamples)
 	r.GET("/sounds/search", h.SearchSamples)
-	r.GET("/sounds/tags", h.ListTags)
+	r.GET("/sounds/tags", h.ListTagsAndCategories)
 	r.GET("/sounds/categories", h.ListCategories)
 	r.GET("/sounds/categories/:id/tags", h.ListCategoryTags)
 	r.GET("/sounds/users/:id", h.ListUserSamples)
