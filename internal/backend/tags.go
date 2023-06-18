@@ -20,6 +20,7 @@ func (b *Backend) ListTagsAndCategories(ctx context.Context) ([]ListTagsAndCateg
 		return nil, err
 	}
 
+	categoryMap := make(map[string][]ListTagsAndCategoriesOutputTag)
 	var output []ListTagsAndCategoriesOutput
 
 	for _, item := range result {
@@ -33,18 +34,18 @@ func (b *Backend) ListTagsAndCategories(ctx context.Context) ([]ListTagsAndCateg
 		category.Category = item.CategoryName
 		category.Tags = append(category.Tags, tag)
 
-		output = append(output, category)
+		if tags, ok := categoryMap[category.Category]; ok {
+			categoryMap[category.Category] = append(tags, category.Tags...)
+		} else {
+			categoryMap[category.Category] = category.Tags
+		}
 	}
 
-	// TODO: OPTIMIZE THIS BULLSHIT
-	for i := 0; i < len(output); i++ {
-		for j := i + 1; j < len(output); j++ {
-			if output[i].Category == output[j].Category {
-				output[i].Tags = append(output[i].Tags, output[j].Tags...)
-				output = append(output[:j], output[j+1:]...)
-				j--
-			}
-		}
+	for category, tags := range categoryMap {
+		output = append(output, ListTagsAndCategoriesOutput{
+			Category: category,
+			Tags:     tags,
+		})
 	}
 
 	return output, nil

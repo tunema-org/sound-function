@@ -49,14 +49,13 @@
 -- GROUP BY
 --     samples.id,
 --     users.username;
-SELECT
-    tags.id AS tag_id,
-    tags.name AS tag_name,
-    categories.name AS category_name
-FROM
-    tags
-    LEFT JOIN categories ON tags.category_id = categories.id;
-
+-- SELECT
+--     tags.id AS tag_id,
+--     tags.name AS tag_name,
+--     categories.name AS category_name
+-- FROM
+--     tags
+--     LEFT JOIN categories ON tags.category_id = categories.id;
 -- SELECT
 --     samples.*,
 --     users.username AS artist_name,
@@ -101,3 +100,14 @@ FROM
 --     users.username
 -- ORDER BY
 --     created_at DESC
+-- UPDATE
+--     users
+-- SET
+--     profile_img_url = 'https://hostedboringavatars.vercel.app/api/beam?colors=EAF89B,141414&name=' || username
+-- WHERE
+--     profile_img_url = 'https://i.pravatar.cc/300'
+SELECT
+    *
+FROM
+    users;
+
