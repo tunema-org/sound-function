@@ -29,15 +29,10 @@ func (b *Backend) ListTagsAndCategories(ctx context.Context) ([]ListTagsAndCateg
 		tag.ID = item.TagID
 		tag.Name = item.TagName
 
-		var category ListTagsAndCategoriesOutput
-
-		category.Category = item.CategoryName
-		category.Tags = append(category.Tags, tag)
-
-		if tags, ok := categoryMap[category.Category]; ok {
-			categoryMap[category.Category] = append(tags, category.Tags...)
+		if tags, ok := categoryMap[item.CategoryName]; ok {
+			categoryMap[item.CategoryName] = append(tags, tag)
 		} else {
-			categoryMap[category.Category] = category.Tags
+			categoryMap[item.CategoryName] = []ListTagsAndCategoriesOutputTag{tag}
 		}
 	}
 
